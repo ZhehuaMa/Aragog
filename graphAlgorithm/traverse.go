@@ -1,8 +1,8 @@
 package graphAlgorithm
 
 import (
-	"graph_cut/graphModel"
-	"graph_cut/utils"
+	"github.com/zhehuama/Aragog/graphModel"
+	"github.com/zhehuama/Aragog/utils"
 )
 
 func BFS(g graphModel.Graph, v graphModel.Node) []graphModel.Node {

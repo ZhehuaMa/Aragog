@@ -1,7 +1,7 @@
 package graphAlgorithm
 
 import (
-	"graph_cut/graphModel"
+	"github.com/zhehuama/Aragog/graphModel"
 	"testing"
 )
 
