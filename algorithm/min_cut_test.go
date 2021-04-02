@@ -1,12 +1,12 @@
-package graphAlgorithm
+package algorithm
 
 import (
-	"github.com/zhehuama/Aragog/graphModel"
+	"Aragog/model"
 	"math"
 	"testing"
 )
 
-var line = []graphModel.Edge{
+var line = []model.Edge{
 	{
 		U:      "0",
 		V:      "1",
@@ -14,7 +14,7 @@ var line = []graphModel.Edge{
 	},
 }
 
-var angle = []graphModel.Edge{
+var angle = []model.Edge{
 	{
 		U:      "0",
 		V:      "1",
@@ -27,7 +27,7 @@ var angle = []graphModel.Edge{
 	},
 }
 
-var triangle = []graphModel.Edge{
+var triangle = []model.Edge{
 	{
 		U:      "0",
 		V:      "1",
@@ -45,7 +45,7 @@ var triangle = []graphModel.Edge{
 	},
 }
 
-var exampleInPaper = []graphModel.Edge{
+var exampleInPaper = []model.Edge{
 	{
 		U:      "1",
 		V:      "2",
@@ -108,11 +108,11 @@ var exampleInPaper = []graphModel.Edge{
 	},
 }
 
-func checkEdge(e1, e2 graphModel.Edge) bool {
+func checkEdge(e1, e2 model.Edge) bool {
 	return ((e1.U == e2.U && e1.V == e2.V) || (e1.U == e2.V && e1.V == e2.U)) && (math.Abs(e1.Weight-e2.Weight) < 1e-5)
 }
 
-func checkEdges(edges1, edges2 []graphModel.Edge, t *testing.T) bool {
+func checkEdges(edges1, edges2 []model.Edge, t *testing.T) bool {
 	for _, e1 := range edges1 {
 		match := false
 		for _, e2 := range edges2 {
@@ -130,7 +130,7 @@ func checkEdges(edges1, edges2 []graphModel.Edge, t *testing.T) bool {
 }
 
 func TestOneNodeGraph(t *testing.T) {
-	graph := new(graphModel.UndirectedGraph)
+	graph := new(model.UndirectedGraph)
 	graph.AddNode("node")
 
 	weight, cut := MinimumCut(graph)
@@ -197,7 +197,7 @@ func TestExampleCut(t *testing.T) {
 	if len(cut) != 2 {
 		t.Fatalf("Length of cut should be 2, but %d gotten.", len(cut))
 	}
-	expectedCut := make([]graphModel.Edge, 2)
+	expectedCut := make([]model.Edge, 2)
 	expectedCut[0] = exampleInPaper[2]
 	expectedCut[1] = exampleInPaper[10]
 	if !checkEdges(cut, expectedCut, t) {

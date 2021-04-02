@@ -1,19 +1,19 @@
-package graphAlgorithm
+package algorithm
 
 import (
-	"github.com/zhehuama/Aragog/graphModel"
-	"github.com/zhehuama/Aragog/utils"
+	"Aragog/model"
+	"Aragog/utils"
 )
 
-func BFS(g graphModel.Graph, v graphModel.Node) []graphModel.Node {
+func BFS(g model.Graph, v model.Node) []model.Node {
 	allNodes := g.GetNodes()
 	if len(allNodes) == 0 {
 		return nil
 	}
 
 	queue := utils.NewListQueue()
-	traverseOrder := make([]graphModel.Node, 0)
-	visited := make(map[graphModel.Node]bool)
+	traverseOrder := make([]model.Node, 0)
+	visited := make(map[model.Node]bool)
 
 	for _, u := range allNodes {
 		visited[u] = false
@@ -22,7 +22,7 @@ func BFS(g graphModel.Graph, v graphModel.Node) []graphModel.Node {
 	queue.Push(v)
 
 	for !queue.IsEmpty() {
-		v = queue.Pop().(graphModel.Node)
+		v = queue.Pop().(model.Node)
 		traverseOrder = append(traverseOrder, v)
 		visited[v] = true
 		edges, _ := g.GetEdgesOf(v)

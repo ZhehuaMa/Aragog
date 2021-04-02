@@ -1,11 +1,11 @@
-package graphAlgorithm
+package algorithm
 
 import (
-	"github.com/zhehuama/Aragog/graphModel"
+	"Aragog/model"
 	"testing"
 )
 
-var dumbbell = []graphModel.Edge{
+var dumbbell = []model.Edge{
 	{
 		U:      "0",
 		V:      "1",
@@ -53,15 +53,15 @@ var dumbbell = []graphModel.Edge{
 	},
 }
 
-func createUndirectedGraph(edges []graphModel.Edge) graphModel.Graph {
-	g := new(graphModel.UndirectedGraph)
+func createUndirectedGraph(edges []model.Edge) model.Graph {
+	g := new(model.UndirectedGraph)
 	for _, e := range edges {
 		g.AddEdge(e)
 	}
 	return g
 }
 
-func checkGraphSize(t *testing.T, graphs []graphModel.Graph, size int) bool {
+func checkGraphSize(t *testing.T, graphs []model.Graph, size int) bool {
 	for i, g := range graphs {
 		if len(g.GetNodes()) > size {
 			t.Errorf("The size of subgraph %d should be equal to or less than %d, but %d is gotten.", i, size, len(graphs[0].GetNodes()))
@@ -74,7 +74,7 @@ func checkGraphSize(t *testing.T, graphs []graphModel.Graph, size int) bool {
 func TestGettingSubGraph(t *testing.T) {
 	g := createUndirectedGraph(dumbbell)
 
-	g1, g2 := getTwoSubGraphs(g, []graphModel.Edge{dumbbell[len(dumbbell)-1]})
+	g1, g2 := getTwoSubGraphs(g, []model.Edge{dumbbell[len(dumbbell)-1]})
 
 	if len(g1.GetNodes()) != 4 || len(g1.GetEdges()) != 4 {
 		t.Errorf("Expecting a (4, 4) graph, but a (%d, %d) graph is seen.", len(g1.GetNodes()), len(g1.GetEdges()))

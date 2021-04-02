@@ -1,4 +1,4 @@
-package graphModel
+package model
 
 type Node string
 

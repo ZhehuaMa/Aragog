@@ -1,19 +1,19 @@
-package graphAlgorithm
+package algorithm
 
 import (
-	"github.com/zhehuama/Aragog/graphModel"
-	"github.com/zhehuama/Aragog/utils"
+	"Aragog/model"
+	"Aragog/utils"
 )
 
-func cutToK(originGraph graphModel.Graph, maxSize int) ([]graphModel.Graph, []graphModel.Edge) {
-	graphs := make([]graphModel.Graph, 0)
-	edges := make([]graphModel.Edge, 0)
+func cutToK(originGraph model.Graph, maxSize int) ([]model.Graph, []model.Edge) {
+	graphs := make([]model.Graph, 0)
+	edges := make([]model.Edge, 0)
 
 	queue := utils.NewListQueue()
 	queue.Push(originGraph.Copy())
 
 	for !queue.IsEmpty() {
-		g := queue.Pop().(graphModel.Graph)
+		g := queue.Pop().(model.Graph)
 		if len(g.GetNodes()) <= maxSize {
 			graphs = append(graphs, g)
 		} else {
@@ -27,7 +27,7 @@ func cutToK(originGraph graphModel.Graph, maxSize int) ([]graphModel.Graph, []gr
 	return graphs, edges
 }
 
-func getTwoSubGraphs(originGraph graphModel.Graph, cut []graphModel.Edge) (g1, g2 graphModel.Graph) {
+func getTwoSubGraphs(originGraph model.Graph, cut []model.Edge) (g1, g2 model.Graph) {
 	graph := originGraph.Copy()
 	for _, e := range cut {
 		_ = graph.RemoveEdge(e.U, e.V)
@@ -35,8 +35,8 @@ func getTwoSubGraphs(originGraph graphModel.Graph, cut []graphModel.Edge) (g1, g
 	nodes1 := BFS(graph, cut[0].U)
 	nodes2 := BFS(graph, cut[0].V)
 
-	createSubGraph := func(nodes []graphModel.Node) graphModel.Graph {
-		g := new(graphModel.UndirectedGraph)
+	createSubGraph := func(nodes []model.Node) model.Graph {
+		g := new(model.UndirectedGraph)
 		for _, v := range nodes {
 			edges, _ := graph.GetEdgesOf(v)
 			for _, e := range edges {

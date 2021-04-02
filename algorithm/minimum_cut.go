@@ -1,8 +1,8 @@
-package graphAlgorithm
+package algorithm
 
 import (
-	"github.com/zhehuama/Aragog/graphModel"
-	"github.com/zhehuama/Aragog/utils"
+	"Aragog/model"
+	"Aragog/utils"
 	"math"
 )
 
@@ -11,11 +11,11 @@ A simple minimum cut of undirected graph algorithm from:
 STOER M, WAGNER F. A Simple Min-Cut Algorithm[J]. Journal of the ACM, 1997, 44(4): 585-591.
 */
 
-func MinimumCut(originGraph graphModel.Graph) (float64, []graphModel.Edge) {
+func MinimumCut(originGraph model.Graph) (float64, []model.Edge) {
 	g := originGraph.Copy()
 
 	cutWeight := math.MaxFloat64
-	cutEdges := make([]graphModel.Edge, 0)
+	cutEdges := make([]model.Edge, 0)
 	node := g.GetNodes()[0]
 
 	mergeInfo := utils.UnionFindSet{}
@@ -32,21 +32,21 @@ func MinimumCut(originGraph graphModel.Graph) (float64, []graphModel.Edge) {
 	return cutWeight, cutEdges
 }
 
-func initMergeInfo(g graphModel.Graph, mergeInfo *utils.UnionFindSet) {
+func initMergeInfo(g model.Graph, mergeInfo *utils.UnionFindSet) {
 	nodes := g.GetNodes()
 	for _, v := range nodes {
 		_ = mergeInfo.Add(string(v))
 	}
 }
 
-func minCutPhase(g, originGraph graphModel.Graph, start graphModel.Node, mergeInfo *utils.UnionFindSet) (
+func minCutPhase(g, originGraph model.Graph, start model.Node, mergeInfo *utils.UnionFindSet) (
 	float64,
-	[]graphModel.Edge,
+	[]model.Edge,
 ) {
 	s, _ := mergeInfo.Find(string(start))
-	start = graphModel.Node(s)
+	start = model.Node(s)
 
-	nodes := make([]graphModel.Node, 0)
+	nodes := make([]model.Node, 0)
 	nodes = append(nodes, start)
 
 	next := start
@@ -60,7 +60,7 @@ func minCutPhase(g, originGraph graphModel.Graph, start graphModel.Node, mergeIn
 	}
 
 	allEdges := originGraph.GetEdges()
-	edges := make([]graphModel.Edge, 0)
+	edges := make([]model.Edge, 0)
 	for _, e := range allEdges {
 		u, _ := mergeInfo.Find(string(e.U))
 		v, _ := mergeInfo.Find(string(e.V))
@@ -78,10 +78,10 @@ func minCutPhase(g, originGraph graphModel.Graph, start graphModel.Node, mergeIn
 	return weight, edges
 }
 
-func getMostTightlyConnectedVertex(nodes []graphModel.Node, g graphModel.Graph) graphModel.Node {
+func getMostTightlyConnectedVertex(nodes []model.Node, g model.Graph) model.Node {
 	maxWeight := float64(0)
-	vertex := graphModel.Node("")
-	weightOfNodes := make(map[graphModel.Node]float64)
+	vertex := model.Node("")
+	weightOfNodes := make(map[model.Node]float64)
 	for _, v := range nodes {
 		edges, _ := g.GetEdgesOf(v)
 	search:
@@ -101,11 +101,11 @@ func getMostTightlyConnectedVertex(nodes []graphModel.Node, g graphModel.Graph) 
 	return vertex
 }
 
-func mergeTwoVertices(g graphModel.Graph, u, v graphModel.Node, mergeInfo *utils.UnionFindSet) {
+func mergeTwoVertices(g model.Graph, u, v model.Node, mergeInfo *utils.UnionFindSet) {
 	root, _ := mergeInfo.Unite(string(u), string(v))
 
-	mergedEdges := make(map[graphModel.Node]float64)
-	gatherEdges := func(edges []graphModel.Edge) {
+	mergedEdges := make(map[model.Node]float64)
+	gatherEdges := func(edges []model.Edge) {
 		for _, e := range edges {
 			mergedEdges[e.V] += e.Weight
 		}
@@ -122,8 +122,8 @@ func mergeTwoVertices(g graphModel.Graph, u, v graphModel.Node, mergeInfo *utils
 		if k == u || k == v {
 			continue
 		}
-		edge := graphModel.Edge{
-			U:      graphModel.Node(root),
+		edge := model.Edge{
+			U:      model.Node(root),
 			V:      k,
 			Weight: weight,
 		}
