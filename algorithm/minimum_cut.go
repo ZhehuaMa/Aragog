@@ -1,8 +1,8 @@
 package algorithm
 
 import (
-	"Aragog/model"
-	"Aragog/utils"
+	"github.com/zhehuama/Aragog/model"
+	"github.com/zhehuama/Aragog/utils"
 	"math"
 )
 

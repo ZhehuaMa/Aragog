@@ -1,8 +1,6 @@
 package utils
 
-import (
-	"errors"
-)
+import "errors"
 
 type nodeInfo struct {
 	name string

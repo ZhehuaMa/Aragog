@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	"Aragog/model"
+	"github.com/zhehuama/Aragog/model"
 	"math"
 	"testing"
 )
