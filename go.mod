@@ -1,3 +1,3 @@
-module github.com/zhehuama/Aragog
+module github.com/ZhehuaMa/Aragog
 
 go 1.14
