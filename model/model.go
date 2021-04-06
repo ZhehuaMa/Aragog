@@ -3,9 +3,10 @@ package model
 type Node string
 
 type Edge struct {
-	U      Node
-	V      Node
-	Weight float64
+	U       Node
+	V       Node
+	Weight  float64
+	Payload interface{}
 }
 
 type Graph interface {
