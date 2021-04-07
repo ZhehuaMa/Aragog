@@ -9,6 +9,8 @@ type Edge struct {
 	Payload interface{}
 }
 
+type adjacentList []Edge
+
 type Graph interface {
 	GetNodes() []Node
 	AddNode(u Node)

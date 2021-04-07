@@ -2,17 +2,17 @@ package model
 
 import "errors"
 
-type UndirectedGraph struct {
+type DirectedGraph struct {
 	adjacentList map[Node]adjacentList
 }
 
-func (g *UndirectedGraph) init() {
+func (g *DirectedGraph) init() {
 	if g.adjacentList == nil {
 		g.adjacentList = make(map[Node]adjacentList)
 	}
 }
 
-func (g *UndirectedGraph) GetNodes() []Node {
+func (g *DirectedGraph) GetNodes() []Node {
 	g.init()
 
 	nodes := make([]Node, 0)
@@ -22,7 +22,7 @@ func (g *UndirectedGraph) GetNodes() []Node {
 	return nodes
 }
 
-func (g *UndirectedGraph) AddNode(u Node) {
+func (g *DirectedGraph) AddNode(u Node) {
 	g.init()
 
 	if _, ok := g.adjacentList[u]; !ok {
@@ -30,21 +30,22 @@ func (g *UndirectedGraph) AddNode(u Node) {
 	}
 }
 
-func (g *UndirectedGraph) RemoveNode(u Node) {
+func (g *DirectedGraph) RemoveNode(u Node) {
 	g.init()
 
 	if _, ok := g.adjacentList[u]; !ok {
 		return
 	}
 
-	edges := g.adjacentList[u]
-	for _, edge := range edges {
-		vEdges := g.adjacentList[edge.V]
-		for i := range vEdges {
-			if vEdges[i].V == u {
-				vEdges[len(vEdges)-1], vEdges[i] = vEdges[i], vEdges[len(vEdges)-1]
-				vEdges = vEdges[:len(vEdges)-1]
-				g.adjacentList[edge.V] = vEdges
+	for v, edges := range g.adjacentList {
+		if v == u {
+			continue
+		}
+		for i := range edges {
+			if edges[i].V == u {
+				edges[len(edges)-1], edges[i] = edges[i], edges[len(edges)-1]
+				edges = edges[:len(edges)-1]
+				g.adjacentList[v] = edges
 				break
 			}
 		}
@@ -53,24 +54,19 @@ func (g *UndirectedGraph) RemoveNode(u Node) {
 	delete(g.adjacentList, u)
 }
 
-func (g *UndirectedGraph) GetEdges() []Edge {
+func (g *DirectedGraph) GetEdges() []Edge {
 	g.init()
 
 	allEdges := make([]Edge, 0)
-	processedVertices := make(map[Node]struct{})
-	for v, edges := range g.adjacentList {
+	for _, edges := range g.adjacentList {
 		for _, e := range edges {
-			if _, ok := processedVertices[e.V]; ok {
-				continue
-			}
 			allEdges = append(allEdges, e)
 		}
-		processedVertices[v] = struct{}{}
 	}
 	return allEdges
 }
 
-func (g *UndirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
+func (g *DirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 	g.init()
 
 	if _, ok := g.adjacentList[u]; !ok {
@@ -83,7 +79,7 @@ func (g *UndirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 	return edges, nil
 }
 
-func (g *UndirectedGraph) AddEdge(e Edge) {
+func (g *DirectedGraph) AddEdge(e Edge) {
 	g.init()
 
 	g.AddNode(e.U)
@@ -96,11 +92,9 @@ func (g *UndirectedGraph) AddEdge(e Edge) {
 	}
 
 	g.adjacentList[e.U] = append(g.adjacentList[e.U], e)
-	e.U, e.V = e.V, e.U
-	g.adjacentList[e.U] = append(g.adjacentList[e.U], e)
 }
 
-func (g *UndirectedGraph) RemoveEdge(u, v Node) error {
+func (g *DirectedGraph) RemoveEdge(u, v Node) error {
 	g.init()
 
 	var ok bool
@@ -112,15 +106,14 @@ func (g *UndirectedGraph) RemoveEdge(u, v Node) error {
 	}
 
 	removeEdge(g.adjacentList, u, v)
-	removeEdge(g.adjacentList, v, u)
 
 	return nil
 }
 
-func (g *UndirectedGraph) Copy() Graph {
+func (g *DirectedGraph) Copy() Graph {
 	g.init()
 
-	newGraph := new(UndirectedGraph)
+	newGraph := new(DirectedGraph)
 	nodes := g.GetNodes()
 	for _, v := range nodes {
 		newGraph.AddNode(v)
