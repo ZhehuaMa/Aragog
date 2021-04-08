@@ -32,8 +32,8 @@ func getTwoSubGraphs(originGraph model.Graph, cut []model.Edge) (g1, g2 model.Gr
 	for _, e := range cut {
 		_ = graph.RemoveEdge(e.U, e.V)
 	}
-	nodes1 := BFS(graph, cut[0].U)
-	nodes2 := BFS(graph, cut[0].V)
+	nodes1, _ := bfs(graph, cut[0].U, "")
+	nodes2, _ := bfs(graph, cut[0].V, "")
 
 	createSubGraph := func(nodes []model.Node) model.Graph {
 		g := new(model.UndirectedGraph)

@@ -5,33 +5,41 @@ import (
 	"github.com/zhehuama/Aragog/utils"
 )
 
-func BFS(g model.Graph, v model.Node) []model.Node {
+func bfs(g model.Graph, s, t model.Node) ([]model.Node, map[model.Node]model.Node) {
 	allNodes := g.GetNodes()
 	if len(allNodes) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	queue := utils.NewListQueue()
 	traverseOrder := make([]model.Node, 0)
+	parents := make(map[model.Node]model.Node)
 	visited := make(map[model.Node]bool)
 
-	for _, u := range allNodes {
-		visited[u] = false
-	}
-
-	queue.Push(v)
+	queue.Push(s)
+	parents[s] = ""
+	visited[s] = true
+	traverseOrder = append(traverseOrder, s)
 
 	for !queue.IsEmpty() {
-		v = queue.Pop().(model.Node)
-		traverseOrder = append(traverseOrder, v)
-		visited[v] = true
-		edges, _ := g.GetEdgesOf(v)
+		s = queue.Pop().(model.Node)
+		if t != "" && s == t {
+			return traverseOrder, parents
+		}
+		edges, _ := g.GetEdgesOf(s)
 		for _, e := range edges {
 			if !visited[e.V] {
 				queue.Push(e.V)
+				parents[e.V] = s
+				visited[e.V] = true
+				traverseOrder = append(traverseOrder, e.V)
 			}
 		}
 	}
 
-	return traverseOrder
+	if t != "" {
+		parents = nil
+	}
+
+	return traverseOrder, parents
 }

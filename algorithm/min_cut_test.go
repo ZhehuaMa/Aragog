@@ -112,10 +112,10 @@ func checkEdge(e1, e2 model.Edge) bool {
 	return ((e1.U == e2.U && e1.V == e2.V) || (e1.U == e2.V && e1.V == e2.U)) && (math.Abs(e1.Weight-e2.Weight) < 1e-5)
 }
 
-func checkEdges(edges1, edges2 []model.Edge, t *testing.T) bool {
-	for _, e1 := range edges1 {
+func checkEdges(actual, expected []model.Edge, t *testing.T) bool {
+	for _, e1 := range actual {
 		match := false
-		for _, e2 := range edges2 {
+		for _, e2 := range expected {
 			if checkEdge(e1, e2) {
 				match = true
 				break

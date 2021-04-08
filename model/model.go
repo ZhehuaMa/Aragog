@@ -17,6 +17,7 @@ type Graph interface {
 	RemoveNode(u Node)
 	GetEdges() []Edge
 	GetEdgesOf(u Node) ([]Edge, error)
+	GetEdgeOf(u, v Node) (Edge, error)
 	AddEdge(e Edge)
 	RemoveEdge(u, v Node) error
 	Copy() Graph

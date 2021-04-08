@@ -83,6 +83,20 @@ func (g *UndirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 	return edges, nil
 }
 
+func (g *UndirectedGraph) GetEdgeOf(u, v Node) (Edge, error) {
+	if _, ok := g.adjacentList[u]; !ok {
+		return Edge{}, errors.New("Vertex " + string(u) + " doesn't exist.")
+	}
+
+	for _, e := range g.adjacentList[u] {
+		if e.V == v {
+			return e, nil
+		}
+	}
+
+	return Edge{}, errors.New("Edge (" + string(u) + ", " + string(v) + ") doesn't exist.")
+}
+
 func (g *UndirectedGraph) AddEdge(e Edge) {
 	g.init()
 
