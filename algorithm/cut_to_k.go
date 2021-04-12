@@ -58,11 +58,11 @@ func CutToKDirected(originGraph model.Graph, maxSize int) ([]model.Graph, []mode
 
 	graph := originGraph.Copy()
 	for len(graph.GetNodes()) > maxSize {
-		subgraph, source := getLargestComponent(graph)
+		subgraph, source := GetLargestComponent(graph)
 		subgraph = cutDirectedGraph(graph, source, maxSize)
 
 		var cut []model.Edge
-		graph, cut = removeSubgraph(graph, subgraph)
+		graph, cut = RemoveSubgraph(graph, subgraph)
 		graphs = append(graphs, subgraph)
 		edges = append(edges, cut...)
 	}
@@ -72,7 +72,7 @@ func CutToKDirected(originGraph model.Graph, maxSize int) ([]model.Graph, []mode
 	return graphs, edges
 }
 
-func getLargestComponent(graph model.Graph) (model.Graph, model.Node) {
+func GetLargestComponent(graph model.Graph) (model.Graph, model.Node) {
 	allNodes := graph.GetNodes()
 
 	source := model.Node("")
@@ -120,7 +120,7 @@ func cutDirectedGraph(graph model.Graph, source model.Node, maxSize int) model.G
 	return subgraph
 }
 
-func removeSubgraph(graph, subgraph model.Graph) (model.Graph, []model.Edge) {
+func RemoveSubgraph(graph, subgraph model.Graph) (model.Graph, []model.Edge) {
 	vertices, subVertices := graph.GetNodes(), subgraph.GetNodes()
 
 	cut := make([]model.Edge, 0)

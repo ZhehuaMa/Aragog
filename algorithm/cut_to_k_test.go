@@ -226,7 +226,7 @@ func TestCompleteUndirectedGraph(t *testing.T) {
 func TestComponent(t *testing.T) {
 	graph := createDirectedGraph(component)
 
-	c, s := getLargestComponent(graph)
+	c, s := GetLargestComponent(graph)
 
 	if len(c.GetNodes()) != 4 {
 		t.Errorf("Expected component's size is %d, but %d gotten.", 4, len(c.GetNodes()))
@@ -244,7 +244,7 @@ func TestComponent(t *testing.T) {
 
 func TestCutSubgraph(t *testing.T) {
 	graph := createDirectedGraph(component)
-	c, s := getLargestComponent(graph)
+	c, s := GetLargestComponent(graph)
 	subgraph := cutDirectedGraph(c, s, 4)
 
 	if len(subgraph.GetNodes()) != 4 {
@@ -258,9 +258,9 @@ func TestCutSubgraph(t *testing.T) {
 
 func TestRemoveSubgraph(t *testing.T) {
 	graph := createDirectedGraph(component)
-	c, s := getLargestComponent(graph)
+	c, s := GetLargestComponent(graph)
 	subgraph := cutDirectedGraph(c, s, 4)
-	g, edges := removeSubgraph(graph, subgraph)
+	g, edges := RemoveSubgraph(graph, subgraph)
 
 	if len(g.GetNodes()) != 2 {
 		t.Errorf("Expected graph size is 2, but %d gotten.", len(g.GetNodes()))
