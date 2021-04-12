@@ -89,6 +89,7 @@ func GetLargestComponent(graph model.Graph) (model.Graph, model.Node) {
 
 	component := new(model.DirectedGraph)
 	for _, v := range vertexSet {
+		component.AddNode(v)
 		edges, _ := graph.GetEdgesOf(v)
 		for _, e := range edges {
 			component.AddEdge(e)
