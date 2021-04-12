@@ -12,7 +12,7 @@ type Edge struct {
 type adjacentList []Edge
 
 type Graph interface {
-	GetNodes() []Node
+	GetNodes() map[Node]struct{}
 	AddNode(u Node)
 	RemoveNode(u Node)
 	GetEdges() []Edge

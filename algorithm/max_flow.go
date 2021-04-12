@@ -44,7 +44,7 @@ func MaxFlow(originGraph model.Graph, s, t model.Node) (float64, []model.Edge) {
 	allNodes := graph.GetNodes()
 
 	sinkNodes := make(map[model.Node]struct{})
-	for _, v := range allNodes {
+	for v := range allNodes {
 		sinkNodes[v] = struct{}{}
 	}
 	for _, v := range sourceNodes {

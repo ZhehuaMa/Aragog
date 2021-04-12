@@ -4,6 +4,7 @@ import (
 	"github.com/zhehuama/Aragog/model"
 	"github.com/zhehuama/Aragog/utils"
 	"math"
+	"sort"
 )
 
 /*
@@ -16,7 +17,16 @@ func MinimumCut(originGraph model.Graph) (float64, []model.Edge) {
 
 	cutWeight := math.MaxFloat64
 	cutEdges := make([]model.Edge, 0)
-	node := g.GetNodes()[0]
+
+	nodesMap := g.GetNodes()
+	nodesSlice := make([]model.Node, 0)
+	for v := range nodesMap {
+		nodesSlice = append(nodesSlice, v)
+	}
+	sort.Slice(nodesSlice, func(i, j int) bool {
+		return nodesSlice[i] < nodesSlice[j]
+	})
+	node := nodesSlice[0]
 
 	mergeInfo := utils.UnionFindSet{}
 	initMergeInfo(g, &mergeInfo)
@@ -34,7 +44,7 @@ func MinimumCut(originGraph model.Graph) (float64, []model.Edge) {
 
 func initMergeInfo(g model.Graph, mergeInfo *utils.UnionFindSet) {
 	nodes := g.GetNodes()
-	for _, v := range nodes {
+	for v := range nodes {
 		_ = mergeInfo.Add(string(v))
 	}
 }

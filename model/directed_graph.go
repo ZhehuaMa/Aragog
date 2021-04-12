@@ -3,21 +3,21 @@ package model
 import "errors"
 
 type DirectedGraph struct {
-	adjacentList map[Node]adjacentList
+	adjacentTable map[Node]adjacentList
 }
 
 func (g *DirectedGraph) init() {
-	if g.adjacentList == nil {
-		g.adjacentList = make(map[Node]adjacentList)
+	if g.adjacentTable == nil {
+		g.adjacentTable = make(map[Node]adjacentList)
 	}
 }
 
-func (g *DirectedGraph) GetNodes() []Node {
+func (g *DirectedGraph) GetNodes() map[Node]struct{} {
 	g.init()
 
-	nodes := make([]Node, 0)
-	for v := range g.adjacentList {
-		nodes = append(nodes, v)
+	nodes := make(map[Node]struct{})
+	for v := range g.adjacentTable {
+		nodes[v] = struct{}{}
 	}
 	return nodes
 }
@@ -25,19 +25,19 @@ func (g *DirectedGraph) GetNodes() []Node {
 func (g *DirectedGraph) AddNode(u Node) {
 	g.init()
 
-	if _, ok := g.adjacentList[u]; !ok {
-		g.adjacentList[u] = make(adjacentList, 0)
+	if _, ok := g.adjacentTable[u]; !ok {
+		g.adjacentTable[u] = make(adjacentList, 0)
 	}
 }
 
 func (g *DirectedGraph) RemoveNode(u Node) {
 	g.init()
 
-	if _, ok := g.adjacentList[u]; !ok {
+	if _, ok := g.adjacentTable[u]; !ok {
 		return
 	}
 
-	for v, edges := range g.adjacentList {
+	for v, edges := range g.adjacentTable {
 		if v == u {
 			continue
 		}
@@ -45,20 +45,20 @@ func (g *DirectedGraph) RemoveNode(u Node) {
 			if edges[i].V == u {
 				edges[len(edges)-1], edges[i] = edges[i], edges[len(edges)-1]
 				edges = edges[:len(edges)-1]
-				g.adjacentList[v] = edges
+				g.adjacentTable[v] = edges
 				break
 			}
 		}
 	}
 
-	delete(g.adjacentList, u)
+	delete(g.adjacentTable, u)
 }
 
 func (g *DirectedGraph) GetEdges() []Edge {
 	g.init()
 
 	allEdges := make([]Edge, 0)
-	for _, edges := range g.adjacentList {
+	for _, edges := range g.adjacentTable {
 		for _, e := range edges {
 			allEdges = append(allEdges, e)
 		}
@@ -69,22 +69,22 @@ func (g *DirectedGraph) GetEdges() []Edge {
 func (g *DirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 	g.init()
 
-	if _, ok := g.adjacentList[u]; !ok {
+	if _, ok := g.adjacentTable[u]; !ok {
 		return nil, errors.New("Node " + string(u) + " doesn't exist.")
 	}
 
-	uEdges := g.adjacentList[u]
+	uEdges := g.adjacentTable[u]
 	edges := make([]Edge, 0)
 	edges = append(edges, uEdges...)
 	return edges, nil
 }
 
 func (g *DirectedGraph) GetEdgeOf(u, v Node) (Edge, error) {
-	if _, ok := g.adjacentList[u]; !ok {
+	if _, ok := g.adjacentTable[u]; !ok {
 		return Edge{}, errors.New("Vertex " + string(u) + " doesn't exist.")
 	}
 
-	for _, e := range g.adjacentList[u] {
+	for _, e := range g.adjacentTable[u] {
 		if e.V == v {
 			return e, nil
 		}
@@ -99,27 +99,27 @@ func (g *DirectedGraph) AddEdge(e Edge) {
 	g.AddNode(e.U)
 	g.AddNode(e.V)
 
-	for _, edge := range g.adjacentList[e.U] {
+	for _, edge := range g.adjacentTable[e.U] {
 		if edge.V == e.V {
 			return
 		}
 	}
 
-	g.adjacentList[e.U] = append(g.adjacentList[e.U], e)
+	g.adjacentTable[e.U] = append(g.adjacentTable[e.U], e)
 }
 
 func (g *DirectedGraph) RemoveEdge(u, v Node) error {
 	g.init()
 
 	var ok bool
-	if _, ok = g.adjacentList[u]; !ok {
+	if _, ok = g.adjacentTable[u]; !ok {
 		return errors.New("Node " + string(u) + " doesn't exist.")
 	}
-	if _, ok = g.adjacentList[v]; !ok {
+	if _, ok = g.adjacentTable[v]; !ok {
 		return errors.New("Node " + string(v) + " doesn't exist.")
 	}
 
-	removeEdge(g.adjacentList, u, v)
+	removeEdge(g.adjacentTable, u, v)
 
 	return nil
 }
@@ -129,7 +129,7 @@ func (g *DirectedGraph) Copy() Graph {
 
 	newGraph := new(DirectedGraph)
 	nodes := g.GetNodes()
-	for _, v := range nodes {
+	for v := range nodes {
 		newGraph.AddNode(v)
 	}
 	edges := g.GetEdges()

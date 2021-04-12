@@ -118,6 +118,28 @@ func TestDiamond(t *testing.T) {
 	}
 }
 
+func TestDiamond2(t *testing.T) {
+	graph := createDirectedGraph(diamond)
+
+	weight, cut := MaxFlow(graph, "1", "5")
+
+	if math.Abs(weight-22) > 1e-5 {
+		t.Errorf("Expected weight is 22, but %f gotten.", weight)
+	}
+
+	if len(cut) != 2 {
+		t.Errorf("Expected size of cut is 3, but %d edges gotten.", len(cut))
+	}
+
+	expectedEdges := make([]model.Edge, 2)
+	expectedEdges[0] = diamond[2]
+	expectedEdges[1] = diamond[3]
+
+	if !checkEdges(cut, expectedEdges, t) {
+		t.Errorf("Check cut failure.")
+	}
+}
+
 func TestSquare(t *testing.T) {
 	graph := createDirectedGraph(square)
 
