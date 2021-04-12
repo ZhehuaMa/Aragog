@@ -273,7 +273,7 @@ func TestRemoveSubgraph(t *testing.T) {
 
 func TestCutDirectedGraphToK(t *testing.T) {
 	graph := createDirectedGraph(component)
-	graphs, cut := cutToKDirected(graph, 4)
+	graphs, cut := CutToKDirected(graph, 4)
 
 	if len(graphs) != 2 {
 		t.Errorf("Expected 2 subgraphs, %d gotten.", len(graphs))
@@ -287,7 +287,7 @@ func TestCutDirectedGraphToK(t *testing.T) {
 func TestCompleteDirectedGraph(t *testing.T) {
 	graph := generateCompleteGraph(100, true)
 
-	graphs, _ := cutToKDirected(graph, 10)
+	graphs, _ := CutToKDirected(graph, 10)
 
 	for i, g := range graphs {
 		if len(g.GetNodes()) > 10 {

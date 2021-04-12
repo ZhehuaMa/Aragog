@@ -52,7 +52,7 @@ func getTwoSubGraphs(originGraph model.Graph, cut []model.Edge) (g1, g2 model.Gr
 	return
 }
 
-func cutToKDirected(originGraph model.Graph, maxSize int) ([]model.Graph, []model.Edge) {
+func CutToKDirected(originGraph model.Graph, maxSize int) ([]model.Graph, []model.Edge) {
 	graphs := make([]model.Graph, 0)
 	edges := make([]model.Edge, 0)
 
