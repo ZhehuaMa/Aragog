@@ -85,6 +85,9 @@ func GetLargestComponent(graph model.Graph) (model.Graph, model.Node) {
 			maxSize = len(vertices)
 			vertexSet = vertices
 		}
+		if len(vertices) == len(graph.GetNodes()) {
+			break
+		}
 	}
 
 	component := new(model.DirectedGraph)
