@@ -104,6 +104,9 @@ func GetLargestComponent(graph model.Graph) (model.Graph, model.Node) {
 
 func cutDirectedGraph(graph model.Graph, source model.Node, maxSize int) model.Graph {
 	traverseOrder, _ := bfs(graph, source, "")
+	if maxSize > len(traverseOrder) {
+		maxSize = len(traverseOrder)
+	}
 	traverseOrder = traverseOrder[:maxSize]
 	subVertices := make(map[model.Node]struct{})
 	for _, v := range traverseOrder {
