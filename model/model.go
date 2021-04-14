@@ -9,7 +9,7 @@ type Edge struct {
 	Payload interface{}
 }
 
-type adjacentList []Edge
+type adjacentList map[Node]Edge
 
 type Graph interface {
 	GetNodes() map[Node]struct{}

@@ -26,7 +26,7 @@ func (g *DirectedGraph) AddNode(u Node) {
 	g.init()
 
 	if _, ok := g.adjacentTable[u]; !ok {
-		g.adjacentTable[u] = make(adjacentList, 0)
+		g.adjacentTable[u] = make(adjacentList)
 	}
 }
 
@@ -37,18 +37,8 @@ func (g *DirectedGraph) RemoveNode(u Node) {
 		return
 	}
 
-	for v, edges := range g.adjacentTable {
-		if v == u {
-			continue
-		}
-		for i := range edges {
-			if edges[i].V == u {
-				edges[len(edges)-1], edges[i] = edges[i], edges[len(edges)-1]
-				edges = edges[:len(edges)-1]
-				g.adjacentTable[v] = edges
-				break
-			}
-		}
+	for _, edges := range g.adjacentTable {
+		delete(edges, u)
 	}
 
 	delete(g.adjacentTable, u)
@@ -75,7 +65,9 @@ func (g *DirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 
 	uEdges := g.adjacentTable[u]
 	edges := make([]Edge, 0)
-	edges = append(edges, uEdges...)
+	for _, e := range uEdges {
+		edges = append(edges, e)
+	}
 	return edges, nil
 }
 
@@ -99,13 +91,11 @@ func (g *DirectedGraph) AddEdge(e Edge) {
 	g.AddNode(e.U)
 	g.AddNode(e.V)
 
-	for _, edge := range g.adjacentTable[e.U] {
-		if edge.V == e.V {
-			return
-		}
+	if _, ok := g.adjacentTable[e.U][e.V]; ok {
+		return
 	}
 
-	g.adjacentTable[e.U] = append(g.adjacentTable[e.U], e)
+	g.adjacentTable[e.U][e.V] = e
 }
 
 func (g *DirectedGraph) RemoveEdge(u, v Node) error {
