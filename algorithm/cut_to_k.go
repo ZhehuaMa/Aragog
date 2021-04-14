@@ -75,17 +75,34 @@ func CutToKDirected(originGraph model.Graph, maxSize int) ([]model.Graph, []mode
 func GetLargestComponent(graph model.Graph) (model.Graph, model.Node) {
 	allNodes := graph.GetNodes()
 
+	type componentType struct {
+		source   model.Node
+		vertices []model.Node
+	}
+	bfsChan := make(chan componentType)
+	for s := range allNodes {
+		go func(source model.Node) {
+			vs, _ := bfs(graph, source, "")
+			c := componentType{
+				source:   source,
+				vertices: vs,
+			}
+			bfsChan <- c
+		}(s)
+	}
+
 	source := model.Node("")
 	maxSize := 0
 	var vertexSet []model.Node
-	for s := range allNodes {
-		vertices, _ := bfs(graph, s, "")
-		if maxSize < len(vertices) {
-			source = s
-			maxSize = len(vertices)
-			vertexSet = vertices
+	i := 0
+	for c := range bfsChan {
+		if maxSize < len(c.vertices) {
+			source = c.source
+			maxSize = len(c.vertices)
+			vertexSet = c.vertices
 		}
-		if len(vertices) == len(graph.GetNodes()) {
+		i++
+		if i == len(allNodes) {
 			break
 		}
 	}
