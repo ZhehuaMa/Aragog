@@ -85,6 +85,25 @@ var component = []model.Edge{
 	},
 }
 
+var lineWith5Nodes = []model.Edge{
+	{
+		U: "0",
+		V: "1",
+	},
+	{
+		U: "1",
+		V: "2",
+	},
+	{
+		U: "2",
+		V: "3",
+	},
+	{
+		U: "3",
+		V: "4",
+	},
+}
+
 func createUndirectedGraph(edges []model.Edge) model.Graph {
 	g := new(model.UndirectedGraph)
 	for _, e := range edges {
@@ -116,8 +135,8 @@ func generateCompleteGraph(size int, directed bool) model.Graph {
 			u := model.Node(strconv.Itoa(i))
 			v := model.Node(strconv.Itoa(j))
 			e := model.Edge{
-				U: u,
-				V: v,
+				U:      u,
+				V:      v,
 				Weight: 1,
 			}
 			g.AddEdge(e)
@@ -271,7 +290,7 @@ func TestRemoveSubgraph(t *testing.T) {
 	}
 }
 
-func TestCutDirectedGraphToK(t *testing.T) {
+func TestCutDirectedGraphToK1(t *testing.T) {
 	graph := createDirectedGraph(component)
 	graphs, cut := CutToKDirected(graph, 4)
 
@@ -280,6 +299,19 @@ func TestCutDirectedGraphToK(t *testing.T) {
 	}
 
 	if !checkEdges(cut, component[5:7], t) {
+		t.Errorf("Cut directed graph failure")
+	}
+}
+
+func TestCutDirectedGraphToK2(t *testing.T) {
+	graph := createDirectedGraph(lineWith5Nodes)
+	graphs, cut := CutToKDirected(graph, 4)
+
+	if len(graphs) != 2 {
+		t.Errorf("Expected 2 subgraphs, %d gotten.", len(graphs))
+	}
+
+	if !checkEdges(cut, lineWith5Nodes[3:4], t) {
 		t.Errorf("Cut directed graph failure")
 	}
 }
