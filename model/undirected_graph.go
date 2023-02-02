@@ -1,6 +1,10 @@
 package model
 
-import "errors"
+import (
+	"errors"
+	"math"
+	"sort"
+)
 
 type UndirectedGraph struct {
 	adjacentTable map[Node]adjacentList
@@ -73,6 +77,13 @@ func (g *UndirectedGraph) GetEdgesOf(u Node) ([]Edge, error) {
 	for _, e := range uEdges {
 		edges = append(edges, e)
 	}
+	sort.Slice(edges, func(i, j int) bool {
+		if math.Abs(edges[i].Weight-edges[j].Weight) < 1e-6 {
+			return edges[i].V < edges[j].V
+		} else {
+			return edges[i].Weight < edges[j].Weight
+		}
+	})
 	return edges, nil
 }
 
